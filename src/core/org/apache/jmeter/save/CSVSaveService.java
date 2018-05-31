@@ -587,7 +587,7 @@ public final class CSVSaveService {
      *            column name from CSV file
      * @return if the label is enclosed in double-quotes
      */
-    private static boolean isVariableName(final String label) {
+    public static boolean isVariableName(final String label) {
         return label.length() > 2 && label.startsWith(VARIABLE_NAME_QUOTE_CHAR)
                 && label.endsWith(VARIABLE_NAME_QUOTE_CHAR);
     }

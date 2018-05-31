@@ -18,18 +18,19 @@
 
 package org.apache.jmeter.save;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.samplers.SampleEvent;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.SampleSaveConfiguration;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class TestCSVSaveService extends JMeterTestCase {
 
@@ -184,4 +185,42 @@ public class TestCSVSaveService extends JMeterTestCase {
         
         assertEquals("Result text has changed", RESULT, CSVSaveService.resultToDelimitedString(new SampleEvent(result,"")));
     }
+
+    //TODO: Now we have to change the isVariableName()'s accessibility to public to be able to test it.
+    @Test
+    //test the method which checks whether a String is indeed a variable name. A variable name starts and ends with a
+    // quote, that is what it checks for.
+    public void testIsVariableName() {
+        String correct = "\"lorem ipsum\"";
+        String correctEmpty = "\".\"";
+        String incorrectSingleQuote = "\'lorem ipsum\'";
+        String incorrectNoQuote = "lorem ipsum";
+
+        assertTrue(CSVSaveService.isVariableName(correct));
+        assertTrue(CSVSaveService.isVariableName(correctEmpty));
+        assertFalse(CSVSaveService.isVariableName(incorrectSingleQuote));
+        assertFalse(CSVSaveService.isVariableName(incorrectNoQuote));
+    }
+
+    //TODO: Now it does create the CSV file with given content, but it does not yet check the content of it.
+    @Test
+    public void testSaveCSVStats() {
+        List<String> someData = new ArrayList<>();
+        someData.add("heho");
+
+        List<List<String>> moreData = new ArrayList<>();
+        moreData.add(someData);
+
+        String[] headers = {"a", "b", "c"};
+
+        File file = new File("/home/mgroenier/Desktop/MGroenier.csv");
+
+        try (FileOutputStream fo = new FileOutputStream(file);
+             OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
+            CSVSaveService.saveCSVStats(moreData, writer, headers);
+        } catch (IOException e) { }
+
+        assertTrue(file.exists());
+    }
+
 }

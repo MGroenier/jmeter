@@ -187,7 +187,7 @@ public class HTMLAssertion extends AbstractTestElement implements Serializable, 
      * 
      * @param inOutput The String to write to file
      */
-    private void writeOutput(String inOutput) {
+    public void writeOutput(String inOutput) {
         String filename = getFilename();
 
         // check if filename defined
