@@ -980,48 +980,16 @@ public final class CSVSaveService {
             push = false;
             switch (state) {
             case INITIAL:
-                if (ch == QUOTING_CHAR) {
-                    state = ParserState.QUOTED;
-                } else if (isDelimOrEOL(delim, ch)) {
-                    push = true;
-                } else {
-                    baos.write(ch);
-                    state = ParserState.PLAIN;
-                }
+                readCharacterInitial(ch, state, delim, push, baos);
                 break;
             case PLAIN:
-                if (ch == QUOTING_CHAR) {
-                    baos.write(ch);
-                    throw new IOException(
-                            "Cannot have quote-char in plain field:["
-                                    + baos.toString() + "]");
-                } else if (isDelimOrEOL(delim, ch)) {
-                    push = true;
-                    state = ParserState.INITIAL;
-                } else {
-                    baos.write(ch);
-                }
+                readCharacterPlain(ch, state, delim, push, baos);
                 break;
             case QUOTED:
-                if (ch == QUOTING_CHAR) {
-                    state = ParserState.EMBEDDEDQUOTE;
-                } else {
-                    baos.write(ch);
-                }
+                readCharacterQuoted(ch, state, delim, push, baos);
                 break;
             case EMBEDDEDQUOTE:
-                if (ch == QUOTING_CHAR) {
-                    baos.write(QUOTING_CHAR); // doubled quote => quote
-                    state = ParserState.QUOTED;
-                } else if (isDelimOrEOL(delim, ch)) {
-                    push = true;
-                    state = ParserState.INITIAL;
-                } else {
-                    baos.write(QUOTING_CHAR);
-                    throw new IOException(
-                            "Cannot have single quote-char in quoted field:["
-                                    + baos.toString() + "]");
-                }
+                readCharacterEmbeddedQuote(ch, state, delim, push, baos);
                 break;
             default:
                 throw new IllegalStateException("Unexpected state " + state);
@@ -1057,6 +1025,55 @@ public final class CSVSaveService {
         }
         return list.toArray(new String[list.size()]);
     }
+
+    private static void readCharacterInitial(int ch, ParserState state, char delim, boolean push, CharArrayWriter baos) {
+        if (ch == QUOTING_CHAR) {
+            state = ParserState.QUOTED;
+        } else if (isDelimOrEOL(delim, ch)) {
+            push = true;
+        } else {
+            baos.write(ch);
+            state = ParserState.PLAIN;
+        }
+    }
+
+    private static void readCharacterPlain(int ch, ParserState state, char delim, boolean push, CharArrayWriter baos) throws IOException {
+        if (ch == QUOTING_CHAR) {
+            baos.write(ch);
+            throw new IOException(
+                    "Cannot have quote-char in plain field:["
+                            + baos.toString() + "]");
+        } else if (isDelimOrEOL(delim, ch)) {
+            push = true;
+            state = ParserState.INITIAL;
+        } else {
+            baos.write(ch);
+        }
+    }
+
+    private static void readCharacterQuoted(int ch, ParserState state, char delim, boolean push, CharArrayWriter baos) {
+        if (ch == QUOTING_CHAR) {
+            state = ParserState.EMBEDDEDQUOTE;
+        } else {
+            baos.write(ch);
+        }
+    }
+
+    private static void readCharacterEmbeddedQuote(int ch, ParserState state, char delim, boolean push, CharArrayWriter baos) throws IOException {
+        if (ch == QUOTING_CHAR) {
+            baos.write(QUOTING_CHAR); // doubled quote => quote
+            state = ParserState.QUOTED;
+        } else if (isDelimOrEOL(delim, ch)) {
+            push = true;
+            state = ParserState.INITIAL;
+        } else {
+            baos.write(QUOTING_CHAR);
+            throw new IOException(
+                    "Cannot have single quote-char in quoted field:["
+                            + baos.toString() + "]");
+        }
+    }
+
 
     private static boolean isDelimOrEOL(char delim, int ch) {
         return ch == delim || ch == '\n' || ch == '\r';
