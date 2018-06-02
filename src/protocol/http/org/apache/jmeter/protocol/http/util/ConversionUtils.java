@@ -191,7 +191,25 @@ public class ConversionUtils {
         // present
 
         // find index of path start
+        final int pathStartIndex = getPathStartIndex(url);
 
+        // find path endIndex
+        int pathEndIndex = getPathEndIndex(url);
+
+        // path is between idx='pathStartIndex' (inclusive) and
+        // idx='pathEndIndex' (exclusive)
+        String currentPath = url.substring(pathStartIndex, pathEndIndex);
+
+
+        StringBuilder newPath = constructPath(currentPath);
+
+        // install new path
+        StringBuilder s = new StringBuilder(url);
+        s.replace(pathStartIndex, pathEndIndex, newPath.toString());
+        return s.toString();
+    }
+
+    private static int getPathStartIndex(String url) {
         int dotSlashSlashIndex = url.indexOf(COLONSLASHSLASH);
         final int pathStartIndex;
         if (dotSlashSlashIndex >= 0)
@@ -207,7 +225,11 @@ public class ConversionUtils {
             pathStartIndex = 0;
         }
 
-        // find path endIndex
+        return pathStartIndex;
+
+    }
+
+    private static int getPathEndIndex(String url) {
         int pathEndIndex = url.length();
 
         int questionMarkIdx = url.indexOf('?');
@@ -222,54 +244,55 @@ public class ConversionUtils {
             }
         }
 
-        // path is between idx='pathStartIndex' (inclusive) and
-        // idx='pathEndIndex' (exclusive)
-        String currentPath = url.substring(pathStartIndex, pathEndIndex);
+        return pathEndIndex;
 
-        final boolean startsWithSlash = currentPath.startsWith(SLASH);
-        final boolean endsWithSlash = currentPath.endsWith(SLASH);
-
-        StringTokenizer st = new StringTokenizer(currentPath, SLASH);
-        List<String> tokens = new ArrayList<>();
-        while (st.hasMoreTokens()) {
-            tokens.add(st.nextToken());
-        }
-
-        for (int i = 0; i < tokens.size(); i++) {
-            if (i < tokens.size() - 1) {
-                final String thisToken = tokens.get(i);
-
-                // Verify for a ".." component at next iteration
-                if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
-                    tokens.remove(i);
-                    tokens.remove(i);
-                    i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable
-                    if (i < -1) {
-                        i = -1; // CHECKSTYLE IGNORE ModifiedControlVariable
-                    }
-                }
-            }
-        }
-
-        StringBuilder newPath = new StringBuilder();
-        if (startsWithSlash) {
-            newPath.append(SLASH);
-        }
-        for (int i = 0; i < tokens.size(); i++) {
-            newPath.append(tokens.get(i));
-
-            // append '/' if this isn't the last token or it is but the original
-            // path terminated w/ a '/'
-            boolean appendSlash = i < (tokens.size() - 1) ? true : endsWithSlash;
-            if (appendSlash) {
-                newPath.append(SLASH);
-            }
-        }
-
-        // install new path
-        StringBuilder s = new StringBuilder(url);
-        s.replace(pathStartIndex, pathEndIndex, newPath.toString());
-        return s.toString();
     }
+
+    private static StringBuilder constructPath(String currentPath) {
+		final boolean startsWithSlash = currentPath.startsWith(SLASH);
+		final boolean endsWithSlash = currentPath.endsWith(SLASH);
+
+		StringTokenizer st = new StringTokenizer(currentPath, SLASH);
+		List<String> tokens = new ArrayList<>();
+		while (st.hasMoreTokens()) {
+			tokens.add(st.nextToken());
+		}
+
+		for (int i = 0; i < tokens.size(); i++) {
+			if (i < tokens.size() - 1) {
+				final String thisToken = tokens.get(i);
+
+				// Verify for a ".." component at next iteration
+				if (thisToken.length() > 0 && !thisToken.equals(DOTDOT) && tokens.get(i + 1).equals(DOTDOT)) {
+					tokens.remove(i);
+					tokens.remove(i);
+					i = i - 2; // CHECKSTYLE IGNORE ModifiedControlVariable
+					if (i < -1) {
+						i = -1; // CHECKSTYLE IGNORE ModifiedControlVariable
+					}
+				}
+			}
+		}
+
+		StringBuilder newPath = new StringBuilder();
+		if (startsWithSlash) {
+			newPath.append(SLASH);
+		}
+		for (int i = 0; i < tokens.size(); i++) {
+			newPath.append(tokens.get(i));
+
+			// append '/' if this isn't the last token or it is but the original
+			// path terminated w/ a '/'
+			boolean appendSlash = i < (tokens.size() - 1) ? true : endsWithSlash;
+			if (appendSlash) {
+				newPath.append(SLASH);
+			}
+		}
+
+		return newPath;
+
+	}
+
+
 
 }
