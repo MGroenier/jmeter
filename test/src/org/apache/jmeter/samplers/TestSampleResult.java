@@ -26,10 +26,16 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.apache.jmeter.junit.JMeterTestCase;
+import org.apache.jmeter.protocol.http.control.AuthManager;
+import org.apache.jmeter.protocol.http.control.CacheManager;
+import org.apache.jmeter.protocol.http.sampler.HTTPSampler;
+import org.apache.jmeter.protocol.http.sampler.HTTPSamplerBase;
 import org.apache.jmeter.util.Calculator;
 import org.apache.jmeter.util.LogRecordingDelegatingLogger;
 import org.apache.jorphan.test.JMeterSerialTest;
 import org.junit.Test;
+
+import java.net.MalformedURLException;
 
 // TODO need more tests - particularly for the new functions
 
@@ -344,5 +350,33 @@ public class TestSampleResult implements JMeterSerialTest {
             Thread.sleep(ms);
             return System.currentTimeMillis() - start;
         }
+
+        @Test
+        public void testSetAuthManager() {
+            AuthManager value = new AuthManager();
+            AuthManager value2 = new AuthManager();
+            value2.addAuth();
+            System.out.println(value2.get(0));
+            AuthManager.Mechanism mechanism ;
+            value2.set(0, "https://login.microsoftonline.com/nl", "jan", "password", "office", "dont" , AuthManager.Mechanism.valueOf("BASIC_DIGEST") );
+            assertEquals(true,value2 != value);
+            assertEquals("jan", value2.get(0).getUser());
+        }
+
+        @Test
+        public void testCacheManager() throws MalformedURLException {
+            HTTPSamplerBase http = new HTTPSampler();
+            CacheManager cache = new CacheManager();
+
+            http.setCacheManager(cache);
+            http.setPath("http://youtube.com");
+            System.out.println(http);
+
+            CacheManager cachManExp = new CacheManager();
+            CacheManager cachManRes = http.getCacheManager();
+            assertEquals(cachManExp, cachManRes);
+
+        }
+
 }
 

@@ -22,6 +22,8 @@ import org.apache.jmeter.testelement.ThreadListener;
 import org.apache.jorphan.collections.HashTree;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertEquals;
+
 /**
  * Tests for {@link JMeterThread}
  */
@@ -70,6 +72,17 @@ public class TestJMeterThread {
         JMeterThread.ThreadListenerTraverser traverser = 
                 new JMeterThread.ThreadListenerTraverser(true);
         hashTree.traverse(traverser);
+    }
+
+    @Test
+    public void testStopThread() {
+        String threadName = "";
+        boolean now = false;
+
+        ThreadGroup instance = new ThreadGroup();
+        boolean expResult = false;
+        boolean result = instance.stopThread(threadName, now);
+        assertEquals(expResult, result);
     }
     
 }
