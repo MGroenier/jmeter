@@ -7,12 +7,12 @@ import static org.junit.Assert.assertEquals;
 
 public class TestReportGenerator {
 
-	@Test
-	public void testToJsonArray() {
-
-		String toJSON = JsonUtil.toJsonArray("H, E, L, L, O,  , W, O, R, L, D");
-		assertEquals("[H, E, L, L, O,  , W, O, R, L, D]", toJSON);
-
-	}
+//	@Test
+//	public void testToJsonArray() {
+//
+//		String toJSON = JsonUtil.toJsonArray("H, E, L, L, O,  , W, O, R, L, D");
+//		assertEquals("[H, E, L, L, O,  , W, O, R, L, D]", toJSON);
+//
+//	}
 
 }

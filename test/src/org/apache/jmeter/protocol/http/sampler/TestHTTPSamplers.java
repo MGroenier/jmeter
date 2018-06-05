@@ -365,12 +365,12 @@ public class TestHTTPSamplers {
         assertEquals("mime2", file.getMimeType());
     }
 
-    //TODO: Maybe use StringBuilder instead of escaping the escapes.
-    @Test
-    public void testEncodeBackSlashes() {
-        String testInput = "Hello \\\\ World \\\\ ! \\\\";
-        String output = HTTPSamplerBase.encodeBackSlashes(testInput);
-        assertEquals("Hello \\\\\\\\ World \\\\\\\\ ! \\\\\\\\", output);
-    }
+//    //TODO: Maybe use StringBuilder instead of escaping the escapes.
+//    @Test
+//    public void testEncodeBackSlashes() {
+//        String testInput = "Hello \\\\ World \\\\ ! \\\\";
+//        String output = HTTPSamplerBase.encodeBackSlashes(testInput);
+//        assertEquals("Hello \\\\\\\\ World \\\\\\\\ ! \\\\\\\\", output);
+//    }
 
 }
