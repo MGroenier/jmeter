@@ -24,6 +24,8 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.apache.jmeter.protocol.http.control.AuthManager;
@@ -351,32 +353,38 @@ public class TestSampleResult implements JMeterSerialTest {
             return System.currentTimeMillis() - start;
         }
 
-//        @Test
-//        public void testSetAuthManager() {
-//            AuthManager value = new AuthManager();
-//            AuthManager value2 = new AuthManager();
-//            value2.addAuth();
-//            System.out.println(value2.get(0));
-//            AuthManager.Mechanism mechanism ;
-//            value2.set(0, "https://login.microsoftonline.com/nl", "jan", "password", "office", "dont" , AuthManager.Mechanism.valueOf("BASIC_DIGEST") );
-//            assertEquals(true,value2 != value);
-//            assertEquals("jan", value2.get(0).getUser());
-//        }
+        @Test
+        public void testSetAuthManager() {
+            AuthManager value = new AuthManager();
+            AuthManager value2 = new AuthManager();
+            value2.addAuth();
+            System.out.println(value2.get(0));
+            AuthManager.Mechanism mechanism ;
+            value2.set(0, "https://login.microsoftonline.com/nl", "jan", "password", "office", "dont" , AuthManager.Mechanism.valueOf("BASIC_DIGEST") );
+            assertEquals(true,value2 != value);
+            assertEquals("jan", value2.get(0).getUser());
+        }
+
+        @Test
+        public void testCacheManager() throws MalformedURLException {
+            HTTPSamplerBase http = new HTTPSampler();
+//            HTTPSamplerBase spy = spy(http);
 //
-//        @Test
-//        public void testCacheManager() throws MalformedURLException {
-//            HTTPSamplerBase http = new HTTPSampler();
-//            CacheManager cache = new CacheManager();
-//
-//            http.setCacheManager(cache);
-//            http.setPath("http://youtube.com");
-//            System.out.println(http);
-//
-//            CacheManager cachManExp = new CacheManager();
-//            CacheManager cachManRes = http.getCacheManager();
-//            assertEquals(cachManExp, cachManRes);
-//
-//        }
+//            when(spy.) // when log.isWarnEnabled() is called, return True.
+
+
+            CacheManager cache = new CacheManager();
+
+
+            http.setCacheManager(cache);
+            http.setPath("http://youtube.com");
+            System.out.println(http);
+
+            CacheManager cachManExp = new CacheManager();
+            CacheManager cachManRes = http.getCacheManager();
+            assertEquals(cachManExp, cachManRes);
+
+        }
 
 }
 

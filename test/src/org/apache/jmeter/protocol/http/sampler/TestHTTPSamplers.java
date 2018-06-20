@@ -365,12 +365,36 @@ public class TestHTTPSamplers {
         assertEquals("mime2", file.getMimeType());
     }
 
-//    //TODO: Maybe use StringBuilder instead of escaping the escapes.
-//    @Test
-//    public void testEncodeBackSlashes() {
-//        String testInput = "Hello \\\\ World \\\\ ! \\\\";
-//        String output = HTTPSamplerBase.encodeBackSlashes(testInput);
-//        assertEquals("Hello \\\\\\\\ World \\\\\\\\ ! \\\\\\\\", output);
-//    }
+    //TODO: Maybe use StringBuilder instead of escaping the escapes.
+    @Test
+    public void testEncodeBackSlashes() {
+        String testInput_correct = "Hello \\\\ World \\\\ ! \\\\";
+        String output_correct = HTTPSamplerBase.encodeBackSlashes(testInput_correct);
+        assertEquals("Hello \\\\\\\\ World \\\\\\\\ ! \\\\\\\\", output_correct);
+
+        String testInput_poluteForwardSlash = "Hello ////\\\\ World ////\\\\ ! ////\\\\";
+        String output_poluteForwardSlash = HTTPSamplerBase.encodeBackSlashes(testInput_poluteForwardSlash);
+        assertEquals("Hello ////\\\\\\\\ World ////\\\\\\\\ ! ////\\\\\\\\", output_poluteForwardSlash);
+
+        String testInput_threeBackslashes = "Hello \\ World \\ ! \\ ";
+        String output_threeBackslashes  = HTTPSamplerBase.encodeBackSlashes(testInput_threeBackslashes );
+        assertEquals("Hello \\\\ World \\\\ ! \\\\ ", output_threeBackslashes);
+
+        String testInput_onlyBackslashes = "\\";
+        String output_onlyBackslashes  = HTTPSamplerBase.encodeBackSlashes(testInput_onlyBackslashes );
+        assertEquals("\\\\", output_onlyBackslashes);
+
+        String testInput_empty = "";
+        String output_empty  = HTTPSamplerBase.encodeBackSlashes(testInput_empty );
+        assertEquals("", output_empty);
+
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testEncodeNullBackSlashes() {
+        String testInput_null = null;
+        String output_null = HTTPSamplerBase.encodeBackSlashes(testInput_null);
+        assertEquals("Hello \\\\\\\\ World \\\\\\\\ ! \\\\\\\\", output_null);
+    }
 
 }

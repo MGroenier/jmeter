@@ -74,15 +74,15 @@ public class TestJMeterThread {
         hashTree.traverse(traverser);
     }
 
-//    @Test
-//    public void testStopThread() {
-//        String threadName = "";
-//        boolean now = false;
-//
-//        ThreadGroup instance = new ThreadGroup();
-//        boolean expResult = false;
-//        boolean result = instance.stopThread(threadName, now);
-//        assertEquals(expResult, result);
-//    }
-    
+    @Test
+    public void testStopThread() {
+        String threadName = "";
+        boolean now = false;
+
+        ThreadGroup instance = new ThreadGroup();
+        boolean expResult = false;
+        boolean result = instance.stopThread(threadName, now);
+        assertEquals(expResult, result);
+    }
+
 }

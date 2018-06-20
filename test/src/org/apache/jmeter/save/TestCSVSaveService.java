@@ -186,41 +186,41 @@ public class TestCSVSaveService extends JMeterTestCase {
         assertEquals("Result text has changed", RESULT, CSVSaveService.resultToDelimitedString(new SampleEvent(result,"")));
     }
 
-//    //TODO: Now we have to change the isVariableName()'s accessibility to public to be able to test it.
-//    @Test
-//    //test the method which checks whether a String is indeed a variable name. A variable name starts and ends with a
-//    // quote, that is what it checks for.
-//    public void testIsVariableName() {
-//        String correct = "\"lorem ipsum\"";
-//        String correctEmpty = "\".\"";
-//        String incorrectSingleQuote = "\'lorem ipsum\'";
-//        String incorrectNoQuote = "lorem ipsum";
-//
-//        assertTrue(CSVSaveService.isVariableName(correct));
-//        assertTrue(CSVSaveService.isVariableName(correctEmpty));
-//        assertFalse(CSVSaveService.isVariableName(incorrectSingleQuote));
-//        assertFalse(CSVSaveService.isVariableName(incorrectNoQuote));
-//    }
-//
-//    //TODO: Now it does create the CSV file with given content, but it does not yet check the content of it.
-//    @Test
-//    public void testSaveCSVStats() {
-//        List<String> someData = new ArrayList<>();
-//        someData.add("heho");
-//
-//        List<List<String>> moreData = new ArrayList<>();
-//        moreData.add(someData);
-//
-//        String[] headers = {"a", "b", "c"};
-//
-//        File file = new File("/home/mgroenier/Desktop/MGroenier.csv");
-//
-//        try (FileOutputStream fo = new FileOutputStream(file);
-//             OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
-//            CSVSaveService.saveCSVStats(moreData, writer, headers);
-//        } catch (IOException e) { }
-//
-//        assertTrue(file.exists());
-//    }
+    //TODO: Now we have to change the isVariableName()'s accessibility to public to be able to test it.
+    @Test
+    //test the method which checks whether a String is indeed a variable name. A variable name starts and ends with a
+    // quote, that is what it checks for.
+    public void testIsVariableName() {
+        String correct = "\"lorem ipsum\"";
+        String correctEmpty = "\".\"";
+        String incorrectSingleQuote = "\'lorem ipsum\'";
+        String incorrectNoQuote = "lorem ipsum";
+
+        assertTrue(CSVSaveService.isVariableName(correct));
+        assertTrue(CSVSaveService.isVariableName(correctEmpty));
+        assertFalse(CSVSaveService.isVariableName(incorrectSingleQuote));
+        assertFalse(CSVSaveService.isVariableName(incorrectNoQuote));
+    }
+
+    //TODO: Now it does create the CSV file with given content, but it does not yet check the content of it.
+    @Test
+    public void testSaveCSVStats() {
+        List<String> someData = new ArrayList<>();
+        someData.add("heho");
+
+        List<List<String>> moreData = new ArrayList<>();
+        moreData.add(someData);
+
+        String[] headers = {"a", "b", "c"};
+
+        File file = new File("/home/mgroenier/Desktop/MGroenier.csv");
+
+        try (FileOutputStream fo = new FileOutputStream(file);
+             OutputStreamWriter writer = new OutputStreamWriter(fo, Charset.forName("UTF-8"))) {
+            CSVSaveService.saveCSVStats(moreData, writer, headers);
+        } catch (IOException e) { }
+
+        assertTrue(file.exists());
+    }
 
 }

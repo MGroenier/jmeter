@@ -3,10 +3,10 @@ package org.apache.jmeter.assertions;
 import org.apache.commons.io.FileUtils;
 import org.apache.jmeter.junit.JMeterTestCase;
 import org.junit.Test;
-
 import java.io.File;
 
 import static junit.framework.TestCase.assertEquals;
+
 
 public class HTMLAssertionTest extends JMeterTestCase {
 

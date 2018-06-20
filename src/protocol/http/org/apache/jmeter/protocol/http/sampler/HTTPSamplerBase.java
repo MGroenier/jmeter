@@ -336,6 +336,10 @@ public abstract class HTTPSamplerBase extends AbstractSampler
         setArguments(new Arguments());
     }
 
+    public static Logger getLog() {
+        return log;
+    }
+
     public enum SourceType {
         HOSTNAME("web_testing_source_ip_hostname"), //$NON-NLS-1$
         DEVICE("web_testing_source_ip_device"), //$NON-NLS-1$
