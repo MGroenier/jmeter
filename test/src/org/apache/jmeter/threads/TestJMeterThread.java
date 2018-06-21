@@ -23,6 +23,8 @@ import org.apache.jorphan.collections.HashTree;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link JMeterThread}
@@ -76,13 +78,15 @@ public class TestJMeterThread {
 
     @Test
     public void testStopThread() {
-        String threadName = "";
-        boolean now = false;
+        ThreadGroup group = new ThreadGroup();
+        JMeterThread thread = mock(JMeterThread.class);
+        when(thread.getThreadName()).thenReturn("test");
 
-        ThreadGroup instance = new ThreadGroup();
-        boolean expResult = false;
-        boolean result = instance.stopThread(threadName, now);
-        assertEquals(expResult, result);
+        thread.setThreadName("test");
+        group.registerStartedThread(thread,new Thread());
+        boolean result = group.stopThread("test", true);
+
+        assertEquals(true, result);
     }
 
 }

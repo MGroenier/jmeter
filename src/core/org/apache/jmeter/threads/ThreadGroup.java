@@ -271,7 +271,7 @@ public class ThreadGroup extends AbstractThreadGroup {
      * @param jMeterThread {@link JMeterThread}
      * @param newThread Thread
      */
-    private void registerStartedThread(JMeterThread jMeterThread, Thread newThread) {
+    public void registerStartedThread(JMeterThread jMeterThread, Thread newThread) {
         allThreads.put(jMeterThread, newThread);
     }
 
